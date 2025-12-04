@@ -1,3 +1,14 @@
 spring:
   application:
     name: desafio-tecnico-simplify-tec
+  datasource:
+    url: jdbc:postgresql://localhost:5433/todo
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.format_sql: true
