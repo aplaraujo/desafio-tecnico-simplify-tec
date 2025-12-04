@@ -8,18 +8,22 @@ import jakarta.persistence.*;
 public class Todo {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
+
+    @Column(name = "description", length = 300, nullable = false)
     private String description;
+
+    @Column(name = "done")
     private Boolean done;
 
+    @Column(name = "priority")
     @Enumerated(EnumType.STRING)
     private PriorityType priority;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Long getId() {
         return id;
@@ -61,11 +65,4 @@ public class Todo {
         this.priority = priority;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
