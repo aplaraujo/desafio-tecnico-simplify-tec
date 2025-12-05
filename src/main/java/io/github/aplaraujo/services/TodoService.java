@@ -47,4 +47,11 @@ public class TodoService {
 
         return todoMapper.toResponse(todoRepository.save(todo));
     }
+
+    public void delete(Long id) {
+        if (!todoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Todo ID not found!");
+        }
+        todoRepository.deleteById(id);
+    }
 }

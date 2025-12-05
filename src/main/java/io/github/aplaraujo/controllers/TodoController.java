@@ -46,4 +46,11 @@ public class TodoController {
         var todoId = Long.parseLong(id);
         return ResponseEntity.ok(todoService.update(todoId, request));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
+        var todoId = Long.parseLong(id);
+        todoService.delete(todoId);
+        return ResponseEntity.noContent().build();
+    }
 }
