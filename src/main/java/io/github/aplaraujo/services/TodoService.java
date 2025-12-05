@@ -37,4 +37,14 @@ public class TodoService {
     public List<TodoResponseDTO> todos() {
         return todoRepository.findAll().stream().map(todoMapper::toResponse).toList();
     }
+
+    public TodoResponseDTO update(Long id, TodoRequestDTO request) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found!"));
+        todo.setName(request.name());
+        todo.setDescription(request.description());
+        todo.setDone(request.done());
+        todo.setPriority(request.priority());
+
+        return todoMapper.toResponse(todoRepository.save(todo));
+    }
 }
