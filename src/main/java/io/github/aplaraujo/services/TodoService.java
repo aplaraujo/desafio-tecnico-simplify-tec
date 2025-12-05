@@ -8,6 +8,7 @@ import io.github.aplaraujo.mappers.TodoMapper;
 import io.github.aplaraujo.repositories.TodoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,9 @@ public class TodoService {
             throw new ResourceNotFoundException("Todo not found!");
         }
         return todoRepository.findById(id);
+    }
+
+    public List<TodoResponseDTO> todos() {
+        return todoRepository.findAll().stream().map(todoMapper::toResponse).toList();
     }
 }

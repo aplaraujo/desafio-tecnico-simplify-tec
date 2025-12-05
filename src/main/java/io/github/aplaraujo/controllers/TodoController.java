@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/todos")
 public class TodoController {
@@ -32,5 +34,10 @@ public class TodoController {
             TodoResponseDTO dto = todoMapper.toResponse(todo);
             return ResponseEntity.ok(dto);
         }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<TodoResponseDTO> todos() {
+        return todoService.todos();
     }
 }
