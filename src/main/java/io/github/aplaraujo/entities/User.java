@@ -1,7 +1,9 @@
 package io.github.aplaraujo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String name;
+
+    @Column
     private String email;
+
+    @Column
     private String password;
+
+    @Type(ListArrayType.class)
+    private List<String> roles;
 
     public Long getId() {
         return id;
@@ -48,4 +59,7 @@ public class User {
         this.password = password;
     }
 
+    public List<String> getRoles() {
+        return roles;
+    }
 }
