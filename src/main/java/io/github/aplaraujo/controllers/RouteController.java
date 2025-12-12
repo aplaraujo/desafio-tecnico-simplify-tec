@@ -24,4 +24,10 @@ public class RouteController {
     public ResponseEntity<String> userRoute() {
         return ResponseEntity.ok("Você está na rota do usuário!");
     }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')") // Define uma autorização para um determinado perfil
+    public ResponseEntity<String> adminRoute() {
+        return ResponseEntity.ok("Você está na rota do administrador!");
+    }
 }

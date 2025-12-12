@@ -1,5 +1,6 @@
 package io.github.aplaraujo.config;
 
+import io.github.aplaraujo.security.CustomAuthenticationProvider;
 import io.github.aplaraujo.security.CustomFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,15 +20,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomFilter customFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            MasterPasswordAuthenticationProvider masterPasswordAuthenticationProvider,
+            CustomAuthenticationProvider customAuthenticationProvider,
+            CustomFilter customFilter) throws Exception {
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/public").permitAll();
                     customizer.requestMatchers("/user").hasRole("USER");
+                    customizer.requestMatchers("/admin").hasRole("ADMIN");
                     customizer.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
+                .authenticationProvider(masterPasswordAuthenticationProvider)
+                .authenticationProvider(customAuthenticationProvider)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
