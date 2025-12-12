@@ -1,5 +1,6 @@
 package io.github.aplaraujo.config;
 
+import io.github.aplaraujo.security.CustomFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,12 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomFilter customFilter) throws Exception {
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/public").permitAll();
@@ -25,6 +27,7 @@ public class SecurityConfiguration {
                 })
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
