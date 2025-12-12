@@ -23,6 +23,7 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/public").permitAll();
+                    customizer.requestMatchers("/user").hasRole("USER");
                     customizer.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
