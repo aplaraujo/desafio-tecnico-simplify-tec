@@ -1,6 +1,7 @@
 package io.github.aplaraujo.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ public class RouteController {
     }
 
     @GetMapping("/private")
-    public ResponseEntity<String> privateRoute() {
-        return ResponseEntity.ok("Você está na rota privada!");
+    public ResponseEntity<String> privateRoute(Authentication authentication) {
+        return ResponseEntity.ok("Você está na rota privada! Usuário conectado: " + authentication.getName());
     }
 }
