@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +27,7 @@ public class SecurityConfiguration {
             CustomAuthenticationProvider customAuthenticationProvider,
             CustomFilter customFilter) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/public").permitAll();
                     customizer.requestMatchers("/user").hasRole("USER");
@@ -45,10 +47,10 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(16);
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.builder().username("user1").password(passwordEncoder().encode("user123")).roles("USER").build();
-        UserDetails user2 = User.builder().username("user2").password(passwordEncoder().encode("user123")).roles("USER").build();
-        return new InMemoryUserDetailsManager(user1, user2);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails user1 = User.builder().username("user1").password(passwordEncoder().encode("user123")).roles("USER").build();
+//        UserDetails user2 = User.builder().username("user2").password(passwordEncoder().encode("user123")).roles("USER").build();
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
 }
