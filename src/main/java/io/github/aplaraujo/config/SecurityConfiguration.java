@@ -4,21 +4,20 @@ import io.github.aplaraujo.security.CustomAuthenticationProvider;
 import io.github.aplaraujo.security.CustomFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -32,6 +31,7 @@ public class SecurityConfiguration {
                     customizer.requestMatchers("/public").permitAll();
                     customizer.requestMatchers("/user").hasRole("USER");
                     customizer.requestMatchers("/admin").hasRole("ADMIN");
+                    customizer.requestMatchers(HttpMethod.POST, "/users").permitAll();
                     customizer.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())

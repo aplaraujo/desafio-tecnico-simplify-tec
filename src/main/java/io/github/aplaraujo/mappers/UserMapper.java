@@ -21,6 +21,7 @@ public class UserMapper {
         user.setLogin(dto.login());
         user.setPassword(dto.password());
         user.setName(dto.name());
+        user.setRoles(new HashSet<>(roles));
         return user;
     }
 }
