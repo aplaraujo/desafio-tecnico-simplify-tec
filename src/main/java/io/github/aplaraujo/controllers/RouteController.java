@@ -20,7 +20,7 @@ public class RouteController {
     }
 
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> userRoute() {
         return ResponseEntity.ok("Você está na rota do usuário!");
     }

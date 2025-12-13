@@ -6,6 +6,7 @@ import io.github.aplaraujo.mappers.TodoMapper;
 import io.github.aplaraujo.services.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +23,13 @@ public class TodoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TodoResponseDTO> save(@RequestBody TodoRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.save(request));
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TodoResponseDTO> findById(@PathVariable("id") String id) {
         var todoId = Long.parseLong(id);
 
@@ -37,17 +40,20 @@ public class TodoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public List<TodoResponseDTO> todos() {
         return todoService.todos();
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TodoResponseDTO> update(@PathVariable("id") String id, @RequestBody TodoRequestDTO request) {
         var todoId = Long.parseLong(id);
         return ResponseEntity.ok(todoService.update(todoId, request));
     }
 
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         var todoId = Long.parseLong(id);
         todoService.delete(todoId);

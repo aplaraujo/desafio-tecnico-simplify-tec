@@ -32,10 +32,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(user == null) {
             throw new BadCredentialsException("User not found!");
         }
+
         if (!passwordsMatch) {
             throw new BadCredentialsException("Password not valid!");
         }
-        List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+
+        System.out.println("========== DEBUG AUTHENTICATION ==========");
+        System.out.println("Login: " + login);
+        System.out.println("Roles do banco:");
+        user.getRoles().forEach(role -> System.out.println("  - " + role.getName()));
+
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).toList();
+
+        System.out.println("========== DEBUG AUTHENTICATION ==========");
+        System.out.println("Login: " + login);
+        System.out.println("Roles do banco:");
+        user.getRoles().forEach(role -> System.out.println("  - " + role.getName()));
 
         UserIdentity userIdentity = new UserIdentity(user.getId(), user.getName(), user.getLogin());
 
@@ -44,6 +56,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }
