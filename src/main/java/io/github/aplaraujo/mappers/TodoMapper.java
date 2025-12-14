@@ -19,6 +19,6 @@ public class TodoMapper {
     }
 
     public TodoResponseDTO toResponse(Todo todo) {
-        return new TodoResponseDTO(todo.getId(), todo.getName(), todo.getDescription(), todo.getDone(), todo.getPriority());
+        return new TodoResponseDTO(todo.getId(), todo.getName(), todo.getDescription(), todo.getDone(), todo.getPriority(), todo.getUserId());
     }
 }

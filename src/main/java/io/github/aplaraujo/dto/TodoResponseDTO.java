@@ -7,6 +7,7 @@ public record TodoResponseDTO(
         String name,
         String description,
         Boolean done,
-        PriorityType priority
+        PriorityType priority,
+        Long userId
 ) {
 }

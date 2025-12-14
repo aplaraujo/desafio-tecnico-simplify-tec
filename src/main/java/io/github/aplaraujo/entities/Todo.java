@@ -4,7 +4,7 @@ import io.github.aplaraujo.entities.enums.PriorityType;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "todos")
+@Table(name = "tb_todo")
 public class Todo {
 
     @Id
@@ -24,6 +24,9 @@ public class Todo {
     @Column(name = "priority")
     @Enumerated(EnumType.STRING)
     private PriorityType priority;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -65,4 +68,11 @@ public class Todo {
         this.priority = priority;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 }
