@@ -27,13 +27,20 @@ public class SecurityConfiguration {
             CustomFilter customFilter) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**") // Ignora CSRF para H2
+                )
                 .authorizeHttpRequests(customizer -> {
+                    customizer.requestMatchers("/h2-console/**").permitAll();
                     customizer.requestMatchers("/public").permitAll();
                     customizer.requestMatchers("/user").hasRole("USER");
                     customizer.requestMatchers("/admin").hasRole("ADMIN");
                     customizer.requestMatchers(HttpMethod.POST, "/users").permitAll();
                     customizer.anyRequest().authenticated();
                 })
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()) // Permite frames para H2
+                )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(masterPasswordAuthenticationProvider)
