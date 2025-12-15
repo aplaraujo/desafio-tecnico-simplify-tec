@@ -28,27 +28,23 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String login = authentication.getName();
         String password = authentication.getCredentials().toString();
         User user = service.getUserWithRoles(login);
-        boolean passwordsMatch = encoder.matches(password, user.getPassword());
+
         if(user == null) {
             throw new BadCredentialsException("User not found!");
         }
+
+        boolean passwordsMatch = encoder.matches(password, user.getPassword());
 
         if (!passwordsMatch) {
             throw new BadCredentialsException("Password not valid!");
         }
 
-        System.out.println("========== DEBUG AUTHENTICATION ==========");
-        System.out.println("Login: " + login);
-        System.out.println("Roles do banco:");
-        user.getRoles().forEach(role -> System.out.println("  - " + role.getName()));
+        System.out.println("Tentando autenticar: " + login);
+        System.out.println("Senha do user: " + user.getPassword());
+        System.out.println("Roles: " + user.getRoles());
+
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).toList();
-
-        System.out.println("========== DEBUG AUTHENTICATION ==========");
-        System.out.println("Login: " + login);
-        System.out.println("Roles do banco:");
-        user.getRoles().forEach(role -> System.out.println("  - " + role.getName()));
-
         UserIdentity userIdentity = new UserIdentity(user.getId(), user.getName(), user.getLogin());
 
         return new UsernamePasswordAuthenticationToken(userIdentity, null, authorities);

@@ -9,7 +9,7 @@ CREATE TABLE tb_todo (
 );
 
 CREATE TABLE tb_role (
- id BIGINT AUTO_INCREMENT NOT NULL,
+ id BIGINT NOT NULL,
  name VARCHAR(255),
  PRIMARY KEY(id)
 );
@@ -33,5 +33,36 @@ CREATE TABLE tb_user (
  login VARCHAR(300) NOT NULL,
  password VARCHAR(300) NOT NULL,
  name VARCHAR(300),
- role
+ role VARCHAR[]
 );
+
+
+DROP TABLE IF EXISTS tb_user_role CASCADE;
+DROP TABLE IF EXISTS tb_user CASCADE;
+DROP TABLE IF EXISTS tb_role CASCADE;
+
+CREATE TABLE tb_role (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE tb_user (
+    id BIGSERIAL PRIMARY KEY,
+    login VARCHAR(300) NOT NULL UNIQUE,
+    password VARCHAR(300) NOT NULL,
+    name VARCHAR(300)
+);
+
+CREATE TABLE tb_user_role (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES tb_user(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES tb_role(id) ON DELETE CASCADE
+);
+
+INSERT INTO tb_role (name) VALUES ('ADMIN'), ('USER');
+
+INSERT INTO tb_user (login, password, name) VALUES ('master', '$2a$16$B9uT6miZtCfhpMiGukdfE.7Xm/eRwty6ytazNh0.KGAdpDc5FF60y', 'Master');
+
+INSERT INTO tb_user_role (user_id, role_id) VALUES (1, 1);

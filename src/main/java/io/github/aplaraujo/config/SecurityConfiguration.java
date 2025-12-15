@@ -27,14 +27,15 @@ public class SecurityConfiguration {
             CustomFilter customFilter) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**") // Ignora CSRF para H2
-                )
+//                .csrf(csrf -> csrf
+//                        .ignoringRequestMatchers("/h2-console/**")
+//                )
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/h2-console/**").permitAll();
                     customizer.requestMatchers("/public").permitAll();
                     customizer.requestMatchers("/user").hasRole("USER");
                     customizer.requestMatchers("/admin").hasRole("ADMIN");
+                    customizer.requestMatchers("/roles/**").hasRole("ADMIN");
                     customizer.requestMatchers(HttpMethod.POST, "/users").permitAll();
                     customizer.anyRequest().authenticated();
                 })
@@ -43,10 +44,10 @@ public class SecurityConfiguration {
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
-                .authenticationProvider(masterPasswordAuthenticationProvider)
                 .authenticationProvider(customAuthenticationProvider)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 
     @Bean
@@ -54,10 +55,4 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(16);
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user1 = User.builder().username("user1").password(passwordEncoder().encode("user123")).roles("USER").build();
-//        UserDetails user2 = User.builder().username("user2").password(passwordEncoder().encode("user123")).roles("USER").build();
-//        return new InMemoryUserDetailsManager(user1, user2);
-//    }
 }

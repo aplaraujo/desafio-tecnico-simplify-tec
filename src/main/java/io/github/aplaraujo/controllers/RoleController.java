@@ -25,7 +25,7 @@ public class RoleController implements GenericController{
 
     @PostMapping
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> save(@RequestBody RoleDTO dto) {
         Role role = roleMapper.toEntity(dto);
         roleService.save(role);
@@ -35,7 +35,7 @@ public class RoleController implements GenericController{
 
     @GetMapping
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RoleDTO> roles() {
         return roleService.roles();
     }
