@@ -1,0 +1,37 @@
+CREATE TABLE tb_todo (
+ id BIGINT AUTO_INCREMENT NOT NULL,
+ name VARCHAR(100) NOT NULL,
+ description VARCHAR(300) NOT NULL,
+ done BOOLEAN NOT NULL,
+ priority VARCHAR(30) NOT NULL,
+ CONSTRAINT chk_priority CHECK (priority IN ('ALTA', 'MEDIA', 'BAIXA')),
+ PRIMARY KEY(id)
+);
+
+CREATE TABLE tb_role (
+ id BIGINT AUTO_INCREMENT NOT NULL,
+ name VARCHAR(255),
+ PRIMARY KEY(id)
+);
+
+CREATE TABLE tb_user (
+ id BIGINT AUTO_INCREMENT NOT NULL,
+ login VARCHAR(255),
+ name VARCHAR(255),
+ password VARCHAR(255),
+ PRIMARY KEY(id)
+);
+
+CREATE TABLE tb_user_role (
+ role_id BIGINT NOT NULL,
+ user_id BIGINT NOT NULL,
+ PRIMARY KEY(role_id, user_id)
+);
+
+CREATE TABLE tb_user (
+ id BIGINT PRIMARY KEY,
+ login VARCHAR(300) NOT NULL,
+ password VARCHAR(300) NOT NULL,
+ name VARCHAR(300),
+ role
+);
