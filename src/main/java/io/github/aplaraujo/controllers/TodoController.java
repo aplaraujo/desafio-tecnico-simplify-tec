@@ -35,7 +35,7 @@ public class TodoController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TodoResponseDTO> save(@RequestBody TodoRequestDTO request) {
         Long userId = getCurrentUserId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.save(request, userId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.save(request));
     }
 
     @GetMapping(value = "/{id}")

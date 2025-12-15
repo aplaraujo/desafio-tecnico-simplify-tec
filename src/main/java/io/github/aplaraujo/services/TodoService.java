@@ -3,9 +3,11 @@ package io.github.aplaraujo.services;
 import io.github.aplaraujo.dto.TodoRequestDTO;
 import io.github.aplaraujo.dto.TodoResponseDTO;
 import io.github.aplaraujo.entities.Todo;
+import io.github.aplaraujo.entities.User;
 import io.github.aplaraujo.exceptions.ResourceNotFoundException;
 import io.github.aplaraujo.mappers.TodoMapper;
 import io.github.aplaraujo.repositories.TodoRepository;
+import io.github.aplaraujo.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +17,17 @@ import java.util.Optional;
 public class TodoService {
     private final TodoRepository todoRepository;
     private final TodoMapper todoMapper;
+    private final UserRepository userRepository;
 
-    public TodoService(TodoRepository todoRepository, TodoMapper todoMapper) {
+    public TodoService(TodoRepository todoRepository, TodoMapper todoMapper, UserRepository userRepository) {
         this.todoRepository = todoRepository;
         this.todoMapper = todoMapper;
+        this.userRepository = userRepository;
     }
 
-    public TodoResponseDTO save(TodoRequestDTO request, Long userId) {
-        Todo todo = todoMapper.toEntity(request);
-        todo.setUserId(userId);
+    public TodoResponseDTO save(TodoRequestDTO request) {
+        User user = userRepository.findById(request.userId()).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+        Todo todo = todoMapper.toEntity(request, user);
         todoRepository.save(todo);
         return todoMapper.toResponse(todo);
     }

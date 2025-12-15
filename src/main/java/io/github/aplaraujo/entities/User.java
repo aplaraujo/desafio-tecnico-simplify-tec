@@ -15,8 +15,7 @@ public class User {
     private String password;
     private String name;
 
-    @OneToMany
-    @JoinTable(name = "tb_todo_user", joinColumns = @JoinColumn(name = "todo_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @OneToMany(mappedBy = "user")
     private Set<Todo> todos = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
